@@ -72,14 +72,11 @@ export default function initMergeGame() {
   scene.add(sun);
 
   function loadModel(path) {
-    return Promise.race([
-      loader.loadAsync(path).then(g => {
-        const m = g.scene;
-        m.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
-        return m;
-      }),
-      new Promise(res => setTimeout(() => res(null), 8000)),
-    ]).catch(() => null);
+    return loader.loadAsync(path).then(g => {
+      const m = g.scene;
+      m.traverse(o => { if (o.isMesh) { o.castShadow = true; o.receiveShadow = true; } });
+      return m;
+    }).catch(() => null);
   }
   async function ensure(name, path) {
     if (!(name in models)) models[name] = await loadModel(path);
@@ -377,7 +374,7 @@ export default function initMergeGame() {
     const base = (import.meta.env && import.meta.env.BASE_URL) || './';
     const A = `${base}assets/3d/`;
     const used = new Set(Object.values(MODEL_FILES));
-    await Promise.all([...used].map(f => ensure(f, `${A}food/${f}`)));
+    for (const f of used) await ensure(f, `${A}food/${f}`);
     buildButtons();
     // 初始食材
     for (let i = 0; i < 8; i++) spawnIngredient();
