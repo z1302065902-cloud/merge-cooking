@@ -7,6 +7,7 @@
 import * as THREE from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
 import { BgmPlayer } from './bgm.js';
+import { donateButtons } from './ui-kit.js';
 
 const params = new URLSearchParams(location.search);
 const TEST = params.get('test') === '1';
@@ -378,6 +379,7 @@ export default function initMergeGame() {
     // 初始食材
     for (let i = 0; i < 8; i++) spawnIngredient();
     flash('点击食材放到棋盘，相同食材自动合并！');
+    donateButtons('merge-cooking');
     if (TEST) {
       // 测试模式自动玩
       setInterval(() => {
